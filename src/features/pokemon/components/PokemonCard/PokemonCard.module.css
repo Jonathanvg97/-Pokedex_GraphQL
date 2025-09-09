@@ -1,55 +1,110 @@
-.cardContent {
-  padding: 20px;
+/* Card base */
+.card {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border: #e7e6e6 solid 1px;
+  overflow: hidden;
+  transition: transform 0.2s ease;
   text-align: center;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 300px;
+  cursor: pointer;
+  position: relative;
 }
 
+.card:hover {
+  transform: translateY(-5px);
+}
+
+/* Footer */
+.cardFooter {
+  background-color: #efefef;
+  display: flex;
+  height: 100px;
+  border-radius: 10px;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  margin-top: auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Número del Pokémon */
+.pokemonNumber {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 4px 10px;
+  border-radius: 15px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #666;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 2;
+}
+
+/* Imagen del Pokémon sobre el footer */
 .pokemonImage {
-  width: 140px;
-  height: 140px;
+  width: 220px;
+  height: 240px;
   object-fit: contain;
-  margin: 0 auto;
   transition: transform 0.3s ease;
+  position: absolute;
+  bottom: 50px;
+  left: 50%;
+  top: 10%;
+  transform: translateX(-50%);
+  z-index: 2;
 }
 
 .pokemonImage:hover {
-  transform: scale(1.1);
+  transform: translate(-50%, -20px);
 }
 
 .pokemonName {
   text-transform: capitalize;
-  margin: 16px 0 12px 0;
   color: #333;
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 600;
+  position: absolute;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+  text-align: center;
+  width: 90%;
 }
 
-.pokemonTypes {
+/* Card content */
+.cardContent {
   display: flex;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: space-between;
 }
 
-.actions {
-  display: flex;
-  justify-content: center;
-  gap: 12px;
-  margin-top: auto;
-  flex-wrap: wrap;
-}
+/* MEDIA QUERIES para mobile */
+@media (max-width: 768px) {
+  .card {
+    height: 220px;
+  }
 
-/* Responsive design */
-@media (max-width: 480px) {
-  .actions {
-    flex-direction: column;
+  .cardFooter {
+    height: 70px;
   }
 
   .pokemonImage {
-    width: 120px;
+    width: 180px;
     height: 120px;
+    bottom: 40px;
+    top: 30%;
+  }
+
+  .pokemonName {
+    font-size: 1rem;
+    bottom: 10px;
   }
 }

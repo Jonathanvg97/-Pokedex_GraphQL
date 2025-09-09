@@ -1,0 +1,74 @@
+.card {
+  background: #d32f2f;
+  border-radius: 16px;
+  padding: 16px;
+  color: #fff;
+  width: 160px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);
+  position: absolute;
+  top: 140%;
+  left: 20%;
+  z-index: 1;
+}
+
+.title {
+  margin: 0 0 12px 0;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.options {
+  background: #fff;
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  color: #000;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+/* Ocultamos el input original */
+.option input[type="radio"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 18px;
+  height: 18px;
+  border: 2px solid #d32f2f;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  cursor: pointer;
+  position: relative;
+}
+
+.option input[type="radio"]::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  transform: scale(0);
+  transition: transform 0.2s ease-in-out;
+  background: #d32f2f;
+}
+
+.option input[type="radio"]:checked::before {
+  transform: scale(1);
+}
+
+.labelText {
+  font-size: 14px;
+}
+
+@media (max-width: 768px) {
+  .card {
+    left: 50%;
+  }
+}
