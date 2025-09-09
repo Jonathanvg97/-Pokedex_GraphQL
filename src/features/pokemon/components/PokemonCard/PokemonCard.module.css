@@ -1,0 +1,55 @@
+.cardContent {
+  padding: 20px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.pokemonImage {
+  width: 140px;
+  height: 140px;
+  object-fit: contain;
+  margin: 0 auto;
+  transition: transform 0.3s ease;
+}
+
+.pokemonImage:hover {
+  transform: scale(1.1);
+}
+
+.pokemonName {
+  text-transform: capitalize;
+  margin: 16px 0 12px 0;
+  color: #333;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.pokemonTypes {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: auto;
+  flex-wrap: wrap;
+}
+
+/* Responsive design */
+@media (max-width: 480px) {
+  .actions {
+    flex-direction: column;
+  }
+
+  .pokemonImage {
+    width: 120px;
+    height: 120px;
+  }
+}

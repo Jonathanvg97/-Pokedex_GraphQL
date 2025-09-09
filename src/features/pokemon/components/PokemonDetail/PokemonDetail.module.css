@@ -1,0 +1,62 @@
+.detailContainer {
+  padding: 20px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.backButton {
+  margin-bottom: 20px;
+}
+
+.detailHeader {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.pokemonImage {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+}
+
+.pokemonInfo {
+  margin-left: 20px;
+}
+
+.pokemonName {
+  text-transform: capitalize;
+  margin: 0 0 10px 0;
+  color: #333;
+}
+
+.pokemonTypes {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.favoriteButton {
+  margin-top: 10px;
+}
+
+.statsContainer {
+  margin-top: 20px;
+}
+
+.stats {
+  margin-top: 10px;
+}
+
+.statRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  padding: 5px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.statLabel {
+  font-weight: bold;
+  text-transform: capitalize;
+}
