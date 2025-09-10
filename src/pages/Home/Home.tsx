@@ -29,7 +29,7 @@ const Home: React.FC = () => {
     setSelectedOption,
     selectedType,
     setSelectedType,
-  } = usePokemons(20);
+  } = usePokemons(40);
   const { typesPokemons } = usePokemonTypes();
   const navigate = useNavigate();
   //Handlers
@@ -79,6 +79,17 @@ const Home: React.FC = () => {
               </div>
               {typeOpen && (
                 <ul className={styles.optionsList}>
+                  {/* Opción para quitar filtro */}
+                  <li
+                    onClick={() => {
+                      setSelectedType(""); // quitar filtro
+                      setTypeOpen(false);
+                    }}
+                  >
+                    Todos
+                  </li>
+
+                  {/* Lista de tipos */}
                   {typesPokemons.map((type) => (
                     <li
                       key={type.name}

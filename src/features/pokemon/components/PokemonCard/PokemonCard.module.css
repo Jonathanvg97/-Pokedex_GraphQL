@@ -1,6 +1,6 @@
 /* Card base */
 .card {
-  background-color: white;
+  background-color: rgb(255, 255, 255);
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border: #e7e6e6 solid 1px;
@@ -30,7 +30,6 @@
   position: relative;
   z-index: 1;
 }
-
 /* Número del Pokémon */
 .pokemonNumber {
   position: absolute;

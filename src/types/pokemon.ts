@@ -3,7 +3,9 @@ export interface Pokemon {
   name: string;
   image: string;
 }
-
+export interface PokemonWithTypes extends Pokemon {
+  types?: string[];
+}
 export interface PokemonStat {
   base_stat: number;
   stat: {

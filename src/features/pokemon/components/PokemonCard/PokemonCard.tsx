@@ -49,6 +49,7 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
         />
         <h3 className={styles.pokemonName}>{pokemon.name}</h3>
       </div>
+      <div className={styles.cardFooter}></div>
     </Button>
   );
 };

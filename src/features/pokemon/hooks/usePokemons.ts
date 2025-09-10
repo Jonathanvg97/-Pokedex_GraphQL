@@ -1,17 +1,25 @@
-import { GET_POKEMONS, type GetPokemonsData } from "@/services/queries";
-import { useQuery } from "@apollo/client/react";
+import {
+  GET_POKEMON_DETAILS,
+  GET_POKEMONS,
+  type GetPokemonDetailsData,
+  type GetPokemonsData,
+} from "@/services/queries";
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { useSearchPokemons } from "./useSearchPokemons";
 import { useDebounce } from "@/hooks/useDebounce";
-import { EnumTypeFilters } from "@/types/pokemon";
+import {
+  EnumTypeFilters,
+  type Pokemon,
+  type PokemonWithTypes,
+} from "@/types/pokemon";
 
-export const usePokemons = (limit: number = 20) => {
+export const usePokemons = (limit: number = 40) => {
   //local states
   const [offset, setOffset] = useState<number>(0);
-  const [allPokemons, setAllPokemons] = useState<
-    GetPokemonsData["pokemons"]["results"]
-  >([]);
+  const [allPokemons, setAllPokemons] = useState<PokemonWithTypes[]>([]);
+
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [selectedOption, setSelectedOption] = useState<EnumTypeFilters>(
     EnumTypeFilters.NAME
@@ -19,6 +27,8 @@ export const usePokemons = (limit: number = 20) => {
   const [selectedType, setSelectedType] = useState<string>("");
 
   //hooks
+  const client = useApolloClient();
+
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const { searchResults, loading: loadingSearch } =
     useSearchPokemons(debouncedSearchTerm);
@@ -27,42 +37,66 @@ export const usePokemons = (limit: number = 20) => {
     variables: { limit, offset },
     skip: !!debouncedSearchTerm,
   });
-  // Si hay búsqueda devuelve el resultado filtrado
-  const pokemons = debouncedSearchTerm
-    ? searchResults && searchResults.id
-      ? [searchResults]
-      : []
-    : allPokemons;
+
   //
   const loadMore = () => setOffset((prev) => prev + limit);
 
   const handleResetFilter = () => setSearchTerm("");
 
+  // 🔹 Enriquecer los Pokémon con tipos en paralelo
+  const enrichPokemonsWithTypes = async (
+    newPokemons: Pokemon[]
+  ): Promise<PokemonWithTypes[]> => {
+    const promises = newPokemons.map(async (p) => {
+      try {
+        const res = await client.query<GetPokemonDetailsData>({
+          query: GET_POKEMON_DETAILS,
+          variables: { name: p.name },
+        });
+        const types = res.data?.pokemon?.types.map((t) => t.type.name) ?? [];
+        return { ...p, types };
+      } catch (err) {
+        console.error(`Error fetching details for ${p.name}:`, err);
+        return { ...p, types: [] };
+      }
+    });
+
+    return await Promise.all(promises);
+  };
   //effects
   useEffect(() => {
-    if (data?.pokemons.results) {
-      setAllPokemons((prev) => {
-        // Evitar duplicados por si vuelven a traer los mismos
-        const newPokemons = data.pokemons.results.filter(
-          (p) => !prev.find((prevP) => prevP.id === p.id)
-        );
-        let updatedPokemons = [...prev, ...newPokemons];
+    if (!data?.pokemons.results) return;
 
-        // 🔹 Orden dinámico
-        if (selectedOption === EnumTypeFilters.NAME) {
-          updatedPokemons = updatedPokemons.sort((a, b) =>
-            a.name.localeCompare(b.name)
-          );
-        } else {
-          updatedPokemons = updatedPokemons.sort(
-            (a, b) => Number(a.id) - Number(b.id)
-          );
-        }
+    const newPokemons = data.pokemons.results.filter(
+      (p) => !allPokemons.find((ap) => ap.id === p.id)
+    );
+    if (newPokemons.length === 0) return;
 
-        return updatedPokemons;
-      });
-    }
+    enrichPokemonsWithTypes(newPokemons).then((enriched) => {
+      let updated = [...allPokemons, ...enriched];
+      updated =
+        selectedOption === EnumTypeFilters.NAME
+          ? updated.sort((a, b) => a.name.localeCompare(b.name))
+          : updated.sort((a, b) => a.id - b.id);
+
+      setAllPokemons(updated);
+    });
   }, [data, selectedOption]);
+
+  // Filtrar por tipo y ordenar según selectedOption
+  const filteredPokemons = (() => {
+    let filtered = selectedType
+      ? allPokemons.filter((p) => p.types?.includes(selectedType))
+      : [...allPokemons];
+
+    filtered =
+      selectedOption === EnumTypeFilters.NAME
+        ? filtered.sort((a, b) => a.name.localeCompare(b.name))
+        : filtered.sort((a, b) => a.id - b.id);
+
+    return filtered;
+  })();
+
   //
   useEffect(() => {
     if (error) {
@@ -71,7 +105,7 @@ export const usePokemons = (limit: number = 20) => {
   }, [error]);
   //
   return {
-    pokemons,
+    pokemons: filteredPokemons,
     loading,
     error,
     loadMore,
