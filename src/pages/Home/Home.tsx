@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./Home.module.css";
 import PokemonGrid from "@/features/pokemon/components/PokemonGrid/PokemonGrid";
 import Button from "@/components/ui/Button/Button";
@@ -12,11 +12,11 @@ import { useNavigate } from "react-router-dom";
 import { usePokemonTypes } from "@/features/pokemon/hooks/usePokemonsType";
 
 const Home: React.FC = () => {
-  //local states
-  const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [typeOpen, setTypeOpen] = useState<boolean>(false);
+  // Local state
+  const [isSortOpen, setIsSortOpen] = useState(false);
+  const [isTypeOpen, setIsTypeOpen] = useState(false);
 
-  //Hook
+  // Hooks
   const {
     pokemons,
     loading,
@@ -29,21 +29,46 @@ const Home: React.FC = () => {
     setSelectedOption,
     selectedType,
     setSelectedType,
-  } = usePokemons(40);
+  } = usePokemons(20);
+
   const { typesPokemons } = usePokemonTypes();
   const navigate = useNavigate();
-  //Handlers
-  const handleSelect = (option: EnumTypeFilters) => {
+
+  // Formatear nombres de tipos
+  const formattedTypes = useMemo(
+    () =>
+      typesPokemons.map((t) => ({
+        ...t,
+        label: t.name.charAt(0).toUpperCase() + t.name.slice(1),
+      })),
+    [typesPokemons]
+  );
+
+  // Handlers
+  const toggleSortDropdown = () => setIsSortOpen((prev) => !prev);
+  const toggleTypeDropdown = () => setIsTypeOpen((prev) => !prev);
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) =>
+    setSearchTerm(e.target.value);
+  const handleSelectSort = (option: EnumTypeFilters) => {
     setSelectedOption(option);
-    setIsOpen(false);
+    setIsSortOpen(false);
   };
-  // Detectar scroll al final de la página
+  const handleSelectType = (type: string) => {
+    setSelectedType(type);
+    setIsTypeOpen(false);
+  };
+
+  const showNoResults = searchTerm && !loadingSearch && pokemons.length === 0;
+
+  // Scroll infinito solo si NO hay filtro activo
   useEffect(() => {
     const handleScroll = () => {
+      // ⚠️ Desactivar scroll infinito si hay filtro por nombre o tipo
+      if (searchTerm || selectedType || loading) return;
+
       if (
         window.innerHeight + window.scrollY >=
-          document.body.offsetHeight - 100 &&
-        !loading
+        document.body.offsetHeight - 100
       ) {
         loadMore();
       }
@@ -51,8 +76,9 @@ const Home: React.FC = () => {
 
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [loading, loadMore]);
-  //UI
+  }, [loading, loadMore, searchTerm, selectedType]);
+
+  // UI
   return (
     <article className={styles.container}>
       <section className={styles.headerContainer}>
@@ -61,6 +87,7 @@ const Home: React.FC = () => {
             <img className={styles.icon} src={IconPokeball} alt="Pokeball" />
             <h1 className={styles.title}>Pokédex</h1>
           </div>
+
           <div className={styles.topControls}>
             <Button
               className={styles.favoritesButton}
@@ -69,36 +96,23 @@ const Home: React.FC = () => {
               Ver favoritos
             </Button>
 
-            {/* Custom Select */}
+            {/* Tipo */}
             <div className={styles.customSelect}>
               <div
                 className={styles.selectedOption}
-                onClick={() => setTypeOpen(!typeOpen)}
+                onClick={toggleTypeDropdown}
               >
                 {selectedType || "Tipos"}
               </div>
-              {typeOpen && (
+              {isTypeOpen && (
                 <ul className={styles.optionsList}>
-                  {/* Opción para quitar filtro */}
-                  <li
-                    onClick={() => {
-                      setSelectedType(""); // quitar filtro
-                      setTypeOpen(false);
-                    }}
-                  >
-                    Todos
-                  </li>
-
-                  {/* Lista de tipos */}
-                  {typesPokemons.map((type) => (
+                  <li onClick={() => handleSelectType("")}>Todos</li>
+                  {formattedTypes.map((type) => (
                     <li
                       key={type.name}
-                      onClick={() => {
-                        setSelectedType(type.name);
-                        setTypeOpen(false);
-                      }}
+                      onClick={() => handleSelectType(type.name)}
                     >
-                      {type.name.charAt(0).toUpperCase() + type.name.slice(1)}
+                      {type.label}
                     </li>
                   ))}
                 </ul>
@@ -107,6 +121,7 @@ const Home: React.FC = () => {
           </div>
         </header>
 
+        {/* Buscador y orden */}
         <div className={styles.controls}>
           <img src={IconSearch} alt="Buscar Pokémon" />
           <input
@@ -114,12 +129,12 @@ const Home: React.FC = () => {
             type="text"
             placeholder="Search Pokemon..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearchChange}
           />
 
           <Button
             className={styles.button}
-            onClick={() => setIsOpen((prev) => !prev)}
+            onClick={toggleSortDropdown}
             style={
               selectedOption === EnumTypeFilters.NAME
                 ? { textDecoration: "underline" }
@@ -130,21 +145,21 @@ const Home: React.FC = () => {
           </Button>
 
           <MenuFilter
-            onChange={handleSelect}
-            open={isOpen}
-            setOpen={setIsOpen}
+            onChange={handleSelectSort}
+            open={isSortOpen}
+            setOpen={setIsSortOpen}
           />
         </div>
       </section>
 
       {loadingSearch && <Spinner />}
 
-      {searchTerm && !loadingSearch && pokemons.length === 0 ? (
+      {showNoResults ? (
         <div className={styles.noResults}>
           <img src={IconPokeball} alt="No results" />
           No hay resultados para "{searchTerm}"
           <Button onClick={handleResetFilter} className={styles.resetButton}>
-            limpiar filtro
+            Limpiar filtro
           </Button>
         </div>
       ) : (
