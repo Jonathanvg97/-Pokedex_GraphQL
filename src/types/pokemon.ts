@@ -1,7 +1,3 @@
-export interface PokemonType {
-  name: string;
-}
-
 export interface Pokemon {
   id: number;
   name: string;
@@ -16,7 +12,16 @@ export interface PokemonStat {
 }
 
 export interface PokemonDetails extends Pokemon {
+  height: number;
+  weight: number;
   base_experience: number;
+  types: [
+    {
+      type: {
+        name: string;
+      };
+    }
+  ];
   stats: PokemonStat[];
 }
 

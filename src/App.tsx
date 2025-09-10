@@ -12,7 +12,7 @@ const App: React.FC = () => {
       <Router>
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/pokemon/:id" element={<PokemonDetail />} />
+          <Route path="/pokemon/:name" element={<PokemonDetail />} />
         </Routes>
       </Router>
       <ToastContainer />
