@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home/Home";
 import PokemonDetail from "./pages/PokemonDetail/PokemonDetail";
 import "./styles/globals.css";
+import Favorites from "./pages/Favorites/Favorites";
 
 const App: React.FC = () => {
   return (
@@ -13,6 +14,7 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/pokemon/:name" element={<PokemonDetail />} />
+          <Route path="/favorites" element={<Favorites />} />
         </Routes>
       </Router>
       <ToastContainer />

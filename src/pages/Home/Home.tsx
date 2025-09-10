@@ -8,6 +8,7 @@ import IconSearch from "../../assets/icons/search.png";
 import Spinner from "@/components/ui/Spinner/Spinner";
 import { MenuFilter } from "@/features/pokemon/components/MenuFilter/MenuFilter";
 import { EnumTypeFilters } from "@/types/pokemon";
+import { useNavigate } from "react-router-dom";
 
 const Home: React.FC = () => {
   //local states
@@ -25,6 +26,7 @@ const Home: React.FC = () => {
     selectedOption,
     setSelectedOption,
   } = usePokemons(20);
+  const navigate = useNavigate();
   //Handlers
   const handleSelect = (option: EnumTypeFilters) => {
     setSelectedOption(option);
@@ -50,9 +52,18 @@ const Home: React.FC = () => {
     <article className={styles.container}>
       <section className={styles.headerContainer}>
         <header className={styles.header}>
-          <img className={styles.icon} src={IconPokeball} alt="Pokeball" />
-          <h1 className={styles.title}>Pokédex</h1>
+          <div className={styles.left}>
+            <img className={styles.icon} src={IconPokeball} alt="Pokeball" />
+            <h1 className={styles.title}>Pokédex</h1>
+          </div>
+          <Button
+            className={styles.favoritesButton}
+            onClick={() => navigate("/favorites")}
+          >
+            Ver favoritos
+          </Button>
         </header>
+
         <div className={styles.controls}>
           <img src={IconSearch} alt="Buscar Pokémon" />
           <input

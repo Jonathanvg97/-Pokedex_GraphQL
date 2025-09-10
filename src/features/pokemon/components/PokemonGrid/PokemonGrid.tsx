@@ -25,10 +25,7 @@ const PokemonGrid: React.FC<PokemonGridProps> = ({ pokemons, isLoading }) => {
         isLoading ? (
           <div key={pokemon.id} className={styles.skeletonCard}></div>
         ) : (
-          <PokemonCard
-            key={pokemon.id}
-            pokemon={pokemon}
-          />
+          <PokemonCard key={pokemon.id} pokemon={pokemon} />
         )
       )}
     </div>

@@ -1,0 +1,28 @@
+.container {
+  padding: 20px;
+  margin: 0 auto;
+  min-height: 100vh;
+  background-color: #dc0a2d;
+}
+
+.container h1 {
+  text-align: center;
+  color: #fff;
+  font-size: 2rem;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.backButton {
+  cursor: pointer;
+  text-decoration: none;
+  background-color: transparent;
+  border: none;
+  align-items: center;
+  display: flex;
+}
+
+.backButton img {
+  width: 28px;
+  height: 28px;
+}

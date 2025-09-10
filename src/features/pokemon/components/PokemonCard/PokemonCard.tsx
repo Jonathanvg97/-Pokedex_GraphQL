@@ -2,6 +2,8 @@ import styles from "./PokemonCard.module.css";
 import type { Pokemon } from "@/types/pokemon";
 import Button from "@/components/ui/Button/Button";
 import { useNavigate } from "react-router-dom";
+import { Heart, HeartIcon } from "lucide-react";
+import { useFavorites } from "@/features/favorites/hooks/useFavorites";
 
 interface PokemonCardProps {
   pokemon: Pokemon;
@@ -10,17 +12,33 @@ interface PokemonCardProps {
 const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
   //
   const navigate = useNavigate();
-  const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`;
+  const { addToFavorites, isFavorite } = useFavorites();
+
   //
-  const handleViewDetails = (pokemon: Pokemon) => {
-    navigate(`/pokemon/${pokemon.name}`);
-  };
-  // Formatear el número del Pokémon con 3 dígitos
+  const imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pokemon.id}.png`;
+
   const formattedNumber = `#${pokemon?.id?.toString().padStart(3, "0")}`;
   //
+
+  const handleViewDetails = () => {
+    navigate(`/pokemon/${pokemon.name}`);
+  };
+  //
   return (
-    <Button className={styles.card} onClick={() => handleViewDetails(pokemon)}>
-      <span className={styles.pokemonNumber}>{formattedNumber}</span>
+    <Button className={styles.card} onClick={handleViewDetails}>
+      <div className={styles.cardHeader}>
+        <span className={styles.pokemonNumber}>{formattedNumber}</span>
+        <div
+          className={styles.heartButton}
+          onClick={(e) => {
+            e.stopPropagation();
+            addToFavorites(pokemon);
+          }}
+          role="button"
+        >
+          {isFavorite(pokemon.id) ? <HeartIcon fill="red" /> : <Heart />}
+        </div>
+      </div>
 
       <div className={styles.cardContent}>
         <img
@@ -29,11 +47,8 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
           alt={pokemon.name}
           loading="lazy"
         />
-
         <h3 className={styles.pokemonName}>{pokemon.name}</h3>
       </div>
-
-      <div className={styles.cardFooter}></div>
     </Button>
   );
 };

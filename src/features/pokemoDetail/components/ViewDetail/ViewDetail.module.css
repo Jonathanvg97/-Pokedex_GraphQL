@@ -60,6 +60,8 @@
   border-radius: 15px;
   padding-top: 1px;
   margin-bottom: 40px;
+  max-width: 580px;
+  margin: 0 auto;
 }
 
 .types {
