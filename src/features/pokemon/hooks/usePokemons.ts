@@ -105,7 +105,7 @@ export const usePokemons = (limit: number = 40) => {
     enrichPokemonsWithTypes(newPokemons).then((enriched) => {
       setAllPokemons((prev) => [...prev, ...enriched]);
     });
-  }, [data]);
+  }, [data, allPokemons, enrichPokemonsWithTypes]);
 
   useEffect(() => {
     if (error) toast.error("Error al cargar los Pokémons, inténtalo de nuevo");

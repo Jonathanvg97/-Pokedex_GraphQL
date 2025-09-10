@@ -25,7 +25,11 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
   };
   //
   return (
-    <Button className={styles.card} onClick={handleViewDetails}>
+    <Button
+      className={styles.card}
+      onClick={handleViewDetails}
+      data-testid="pokemon-card"
+    >
       <div className={styles.cardHeader}>
         <span className={styles.pokemonNumber}>{formattedNumber}</span>
         <div
@@ -35,6 +39,7 @@ const PokemonCard: React.FC<PokemonCardProps> = ({ pokemon }) => {
             addToFavorites(pokemon);
           }}
           role="button"
+          data-testid="heart-icon"
         >
           {isFavorite(pokemon.id) ? <HeartIcon fill="red" /> : <Heart />}
         </div>

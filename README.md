@@ -10,6 +10,7 @@ Una aplicación moderna de Pokédex construida con React mediante el inicializad
 - [Uso](#uso)
 - [Características](#características)
 - [Arquitectura](#arquitectura)
+- [Ejecución Pruebas](#ejecución-pruebas)
 - [Tecnologías Usadas](#tecnologías-usadas)
 - [Estructura de Carpetas](#estructura-de-carpetas)
 - [Variables de Entorno](#variables-de-entorno)
@@ -83,6 +84,13 @@ Para comenzar con el proyecto, sigue estos pasos:
 
    ```
 
+8. **Componentes testeados**:
+   ```bash
+   Verifica que se renderice el nombre, número e imagen del Pokémon.
+   Comprueba que al hacer clic en la tarjeta se navegue a la página de detalle.
+   Verifica que el botón de "favoritos" funcione correctamente y que cambie el icono si el Pokémon está en favoritos.
+   ```
+
 ## Arquitectura
 
 La aplicación sigue un enfoque de arquitectura limpia, donde:
@@ -90,6 +98,13 @@ La aplicación sigue un enfoque de arquitectura limpia, donde:
 1. **La lógica de negocio está separada en hooks y servicios**
 2. **Los componentes de UI se encuentran en la carpeta components.**
 3. **La persistencia se maneja con Dexie.js para almacenar los pokemones favoritas en IndexedDB.**
+
+## Ejecución de Pruebas
+
+1. **Ejecutar las pruebas unitarias**:
+   ```bash
+    npm run test
+   ```
 
 ## Tecnologías Usadas
 
@@ -99,6 +114,8 @@ La aplicación sigue un enfoque de arquitectura limpia, donde:
 4. **Dexie.js: Una capa para IndexedDB que facilita la persistencia de datos en el navegador.**
 5. **pokeAPI: API para obtener datos de los pokemones.**
 6. **Vite como herramienta de build y desarrollo**
+7. **Dexie: Administración y manejo de la indexdb**
+8. **Se utilizó Vitest y React Testing Library para realizar las pruebas de los componentes de React.**
 
 ## Estructura de Carpetas
 

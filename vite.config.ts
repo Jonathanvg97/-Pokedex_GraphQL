@@ -1,10 +1,11 @@
+/// <reference types="vitest" />
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
- base: "/",
+  base: "/",
   preview: {
     port: 80,
     strictPort: true,
@@ -14,6 +15,15 @@ export default defineConfig({
     strictPort: true,
     host: true,
     origin: "http://localhost:5173",
+  },
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./src/setupTests.ts",
+    coverage: {
+      provider: "istanbul",
+      reporter: ["text", "json", "html"],
+    },
   },
   resolve: {
     alias: {

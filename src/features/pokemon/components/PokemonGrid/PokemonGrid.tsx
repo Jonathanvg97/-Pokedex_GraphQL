@@ -23,7 +23,11 @@ const PokemonGrid: React.FC<PokemonGridProps> = ({ pokemons, isLoading }) => {
     <div className={styles.grid}>
       {pokemons.map((pokemon) =>
         isLoading ? (
-          <div key={pokemon.id} className={styles.skeletonCard}></div>
+          <div
+            key={pokemon.id}
+            className={styles.skeletonCard}
+            data-testid="skeleton-card"
+          ></div>
         ) : (
           <PokemonCard key={pokemon.id} pokemon={pokemon} />
         )
