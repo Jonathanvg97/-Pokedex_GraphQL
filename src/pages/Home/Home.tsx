@@ -9,10 +9,12 @@ import Spinner from "@/components/ui/Spinner/Spinner";
 import { MenuFilter } from "@/features/pokemon/components/MenuFilter/MenuFilter";
 import { EnumTypeFilters } from "@/types/pokemon";
 import { useNavigate } from "react-router-dom";
+import { usePokemonTypes } from "@/features/pokemon/hooks/usePokemonsType";
 
 const Home: React.FC = () => {
   //local states
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [typeOpen, setTypeOpen] = useState<boolean>(false);
 
   //Hook
   const {
@@ -25,7 +27,10 @@ const Home: React.FC = () => {
     loadingSearch,
     selectedOption,
     setSelectedOption,
+    selectedType,
+    setSelectedType,
   } = usePokemons(20);
+  const { typesPokemons } = usePokemonTypes();
   const navigate = useNavigate();
   //Handlers
   const handleSelect = (option: EnumTypeFilters) => {
@@ -56,12 +61,39 @@ const Home: React.FC = () => {
             <img className={styles.icon} src={IconPokeball} alt="Pokeball" />
             <h1 className={styles.title}>Pokédex</h1>
           </div>
-          <Button
-            className={styles.favoritesButton}
-            onClick={() => navigate("/favorites")}
-          >
-            Ver favoritos
-          </Button>
+          <div className={styles.topControls}>
+            <Button
+              className={styles.favoritesButton}
+              onClick={() => navigate("/favorites")}
+            >
+              Ver favoritos
+            </Button>
+
+            {/* Custom Select */}
+            <div className={styles.customSelect}>
+              <div
+                className={styles.selectedOption}
+                onClick={() => setTypeOpen(!typeOpen)}
+              >
+                {selectedType || "Tipos"}
+              </div>
+              {typeOpen && (
+                <ul className={styles.optionsList}>
+                  {typesPokemons.map((type) => (
+                    <li
+                      key={type.name}
+                      onClick={() => {
+                        setSelectedType(type.name);
+                        setTypeOpen(false);
+                      }}
+                    >
+                      {type.name.charAt(0).toUpperCase() + type.name.slice(1)}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
         </header>
 
         <div className={styles.controls}>

@@ -16,6 +16,8 @@ export const usePokemons = (limit: number = 20) => {
   const [selectedOption, setSelectedOption] = useState<EnumTypeFilters>(
     EnumTypeFilters.NAME
   );
+  const [selectedType, setSelectedType] = useState<string>("");
+
   //hooks
   const debouncedSearchTerm = useDebounce(searchTerm, 500);
   const { searchResults, loading: loadingSearch } =
@@ -80,5 +82,7 @@ export const usePokemons = (limit: number = 20) => {
     loadingSearch,
     selectedOption,
     setSelectedOption,
+    selectedType,
+    setSelectedType,
   };
 };

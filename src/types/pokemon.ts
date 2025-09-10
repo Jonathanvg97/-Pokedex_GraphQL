@@ -25,6 +25,11 @@ export interface PokemonDetails extends Pokemon {
   stats: PokemonStat[];
 }
 
+export interface PokemonType {
+  id: number;
+  name: string;
+}
+
 export interface ApiResponse<T> {
   loading: boolean;
   error?: string;

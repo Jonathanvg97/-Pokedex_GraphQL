@@ -1,5 +1,5 @@
 import { gql } from "@apollo/client";
-import type { Pokemon, PokemonDetails } from "../types/pokemon";
+import type { Pokemon, PokemonDetails, PokemonType } from "../types/pokemon";
 
 // Obtener lista de Pokémon
 export const GET_POKEMONS = gql`
@@ -72,5 +72,5 @@ export interface GetPokemonDetailsData {
 }
 
 export interface GetPokemonTypesData {
-  types: { results: { id: number; name: string }[] };
+  types: { results: PokemonType[] };
 }
