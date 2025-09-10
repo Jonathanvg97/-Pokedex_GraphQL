@@ -72,6 +72,16 @@ Para comenzar con el proyecto, sigue estos pasos:
    ```bash
    La aplicación es completamente responsiva y se adapta a diferentes tamaños de pantalla..
    ```
+7. **Optimización de consultas y scroll infinito**:
+
+   ```bash
+   Búsqueda con debounce: se evita hacer consultas en cada tecla presionada, reduciendo llamadas innecesarias.
+
+   Scroll infinito condicionado: cuando hay filtros activos (por nombre o tipo), el scroll no dispara nuevas consultas.
+
+   Almacenamiento local con IndexedDB (Dexie): los Pokémon ya cargados se guardan en la base de datos local, evitando pedir nuevamente datos ya obtenidos.
+
+   ```
 
 ## Arquitectura
 
